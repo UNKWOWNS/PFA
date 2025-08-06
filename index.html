@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PFA Esports League</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+
+    /* Reset */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Orbitron', monospace, sans-serif;
+      background: linear-gradient(135deg, #000814 0%, #001a33 50%, #050914 100%);
+      color: #00bfff;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Animated background */
+    .bg-animation {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      opacity: 0.08;
+      background: linear-gradient(45deg, transparent, #00bfff, transparent);
+      animation: rotate 25s linear infinite;
+      transform-origin: center;
+    }
+    @keyframes rotate {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(10,20,36,0.95);
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 0 20px #00bfff;
+      z-index: 999;
+      backdrop-filter: blur(6px);
+      border-bottom: 2px solid #00bfff;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo {
+      width: 55px;
+      filter: drop-shadow(0 0 8px #00bfff);
+    }
+    h1 {
+      font-size: 2rem;
+      color: #00bfff;
+      text-shadow: 0 0 10px #00bfff, 0 0 20px #00ffff;
+      font-weight: 700;
+    }
+
+    nav {
+      display: flex;
+      gap: 2.5rem;
+    }
+    nav a {
+      color: #00bfff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding-bottom: 4px;
+      position: relative;
+      transition: color 0.3s ease;
+      cursor: pointer;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 3px;
+      bottom: 0;
+      left: 0;
+      background: #00bfff;
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+    nav a:hover,
+    nav a.active {
+      color: #00ffff;
+    }
+    nav a:hover::after,
+    nav a.active::after {
+      width: 100%;
+      box-shadow: 0 0 10px #00bfff, 0 0 25px #00ffff;
+    }
+
+    /* UPDATED discord-login button to be a link with OAuth2 */
+    
+    
+    #discord-login a:hover {
+      background-color: #00ffff;
+      box-shadow: 0 0 25px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff;
+      color: #050914;
+    }
+
+    main {
+      flex-grow: 1;
+      padding: 6rem 2rem 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hero {
+      margin-bottom: 6rem;
+    }
+    .hero h1 {
+      font-size: 4rem;
+      background: linear-gradient(45deg, #00bfff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glow 2.5s ease-in-out infinite alternate;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.4rem;
+      color: #33cfffcc;
+      margin-bottom: 3rem;
+      text-shadow: 0 0 10px #00bfff88;
+    }
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 20px #00bfff); }
+      to { filter: drop-shadow(0 0 40px #00ffff); }
+    }
+
+    .btn-cta {
+      background: linear-gradient(45deg, #00bfff, #00ffff);
+      color: #000814;
+      font-weight: 700;
+      font-size: 1.3rem;
+      padding: 1rem 3rem;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 0 25px #00bfff, 0 0 40px #00ffff, 0 0 60px #00ffff;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    .btn-cta:hover {
+      background: linear-gradient(45deg, #00ffff, #00bfff);
+      box-shadow: 0 0 40px #00ffff, 0 0 60px #00ffff, 0 0 80px #00ffff;
+      color: #050914;
+      transform: translateY(-5px);
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 5rem;
+      padding: 0 1rem;
+    }
+
+    section h2 {
+      font-size: 3rem;
+      color: #00bfff;
+      margin-bottom: 3rem;
+      text-shadow: 0 0 10px #00bfff;
+    }
+
+    /* Features Grid */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+    }
+    .feature-card {
+      background: rgba(0, 191, 255, 0.07);
+      border: 1px solid #00bfff44;
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: left;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px transparent;
+    }
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 20px #00bfffcc;
+      border-color: #00ffffcc;
+      background: rgba(0, 255, 255, 0.1);
+    }
+    .feature-card h3 {
+      color: #00ffff;
+      margin-bottom: 1rem;
+    }
+    .feature-card p {
+      color: #cceeffcc;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    /* Tournament info */
+    .tournament-info {
+      background: linear-gradient(135deg, rgba(0, 191, 255, 0.1), rgba(0, 204, 255, 0.1));
+      border-radius: 20px;
+      padding: 3rem;
+      margin: 3rem 0;
+      color: #00e0ffcc;
+      text-align: center;
+      box-shadow: 0 0 15px #00bfff44;
+    }
+    .prize-pool {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #00ffff;
+      margin: 1rem 0;
+      text-shadow: 0 0 20px #00ffff;
+    }
+
+    /* Stats Grid */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .stat-card {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 15px;
+      border: 1px solid #00bfff77;
+      padding: 2rem;
+      text-align: center;
+      color: #00dfff;
+      box-shadow: 0 0 10px #00bfff99;
+    }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 15px #00bfffbb;
+    }
+    .stat-label {
+      opacity: 0.8;
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(0, 0, 20, 0.95);
+      padding: 3rem 2rem 1rem;
+      text-align: center;
+      border-top: 2px solid #00bfff;
+      box-shadow: inset 0 0 30px #004466aa;
+      color: #0099cc;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-top: auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav {
+        gap: 1.2rem;
+      }
+      nav a {
+        font-size: 1rem;
+      }
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+      .hero p {
+        font-size: 1.1rem;
+      }
+      section h2 {
+        font-size: 2rem;
+      }
+      .features {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Scroll fade-in */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation"></div>
+
+  <header>
+    <div class="logo-container">
+      <img src="PFA_LOGO.png" alt="PFA Logo" class="logo" />
+      <h1>PFA</h1>
+    </div>
+    <nav>
+      <a href="index.html" class="nav-link active">Home</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="tournament.html" class="nav-link">Tournament</a>
+    </nav>
+    <!-- Updated discord login button as OAuth2 link -->
+    <div id="discord-login">
+      <a href="https://discord.com/oauth2/authorize?client_id=1401663809164410971&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fcallback.html&scope=identify%20email" target="_self">
+      
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero fade-in" id="home">
+      <h1>Pro For All Championship</h1>
+      <p>The premier VR esports league with over 50 competitive teams battling in Gorilla Tag.</p>
+      <a href="tournament.html" class="btn-cta">Join the Competition</a>
+    </section>
+
+    <section class="section fade-in" id="tournaments">
+      <h2>Tournaments</h2>
+      <div class="tournament-info">
+        <h3>Season 2024 Championship</h3>
+        <div class="prize-pool">Become The Best</div>
+        <p>Register now for your chance to compete in the most competitive Gorilla Tag tournament.</p>
+        <!-- Updated Register Now button linking Discord invite -->
+        <a href="https://discord.gg/jGVRMBvVVM" target="_blank" class="btn-cta">Register Now</a>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <span class="stat-number">1000+</span>
+          <div class="stat-label">Active Players</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">50+</span>
+          <div class="stat-label">Teams</div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section fade-in" id="features">
+      <h2>Why Choose PFA?</h2>
+      <div class="features">
+        <div class="feature-card">
+          <h3>🏆 Competitive Leagues</h3>
+          <p>Join scrim queues and prove your spot. Team-based competitions with skill-based matchmaking.</p>
+        </div>
+        <div class="feature-card">
+          <h3>💰 Cash Prizes</h3>
+          <p>Compete for real money prizes in tournaments. The best players earn the most.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🎮 Professional Streaming</h3>
+          <p>Watch live matches with professional commentary. Learn from the best and enjoy high-quality VR content.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🌍 Global Community</h3>
+          <p>Connect with players worldwide. Join our Discord, find teammates, and be part of the largest Gorilla Tag league.</p>
+        </div>
+        <div class="feature-card">
+          <h3>📈 Skill Development</h3>
+          <p>Improve your gameplay with practice modes. From beginner to pro in no time.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🎯 Fair Play</h3>
+          <p>Anti-cheat protection and fair matchmaking ensure competitive integrity. Play with confidence and skill.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section fade-in" id="join">
+      <h2>Ready to Compete?</h2>
+      <div class="tournament-info">
+        <h3>Join the largest VR esports league</h3>
+        <p>Whether you're a casual player or aspiring pro, PFA has something for everyone. Start your journey today!</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem;">
+          <a href="https://discord.gg/jGVRMBvVVM" target="_blank" class="btn-cta">Join Discord</a>
+    
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 PFA Esports League. Embrace your inner monke and compete at the highest level.</p>
+  </footer>
+
+  <script>
+    // Smooth scrolling for internal links (if any)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(anchor.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Fade in animation on scroll
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, observerOptions);
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
