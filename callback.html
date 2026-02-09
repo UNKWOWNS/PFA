@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Discord OAuth2 Callback</title>
+</head>
+<body>
+  <h1>Discord OAuth2 Callback</h1>
+  <p id="message">Processing...</p>
+
+  <script>
+    // Get the 'code' query parameter from the URL
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    if (code) {
+      document.getElementById('message').textContent = `Code received: ${code}`;
+      // Normally here you would send this code to your backend to exchange for an access token
+    } else {
+      document.getElementById('message').textContent = 'No code received.';
+    }
+  </script>
+</body>
+</html>
